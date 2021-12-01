@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Zone Identifier
+.txt:Zone.Identifier
+
+#vscode
+.vscode/
