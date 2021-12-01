@@ -132,4 +132,4 @@ dmypy.json
 .txt:Zone.Identifier
 
 #vscode
-.vscode/
+.vscode
