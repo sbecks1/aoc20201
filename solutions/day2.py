@@ -13,9 +13,9 @@ def part1(input):
         units: int = int(instr[1])
         if dir == "down":
             depth += units
-        if dir == "up":
+        elif dir == "up":
             depth -= units
-        if dir == "forward":
+        elif dir == "forward":
             h_pos += units
 
     return h_pos * depth
@@ -31,9 +31,9 @@ def part2(input):
         units: int = int(instr[1])
         if dir == "down":
             aim += units
-        if dir == "up":
+        elif dir == "up":
             aim -= units
-        if dir == "forward":
+        elif dir == "forward":
             h_pos += units
             depth += aim * units
 
