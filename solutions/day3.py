@@ -6,8 +6,7 @@ def part1(input: "list[str]") -> int:
     gamma = "0b"
     epsilon = "0b"
     for i in zip(*lines):
-        nums = [int(elem) for elem in i]
-        if sum(nums) > len(i) / 2:
+        if i.count("1") > len(i) / 2:
             gamma += "1"
             epsilon += "0"
         else:
@@ -15,6 +14,10 @@ def part1(input: "list[str]") -> int:
             epsilon += "1"
 
     return int(gamma, 2) * int(epsilon, 2)
+
+
+def part2(input: "list[str]") -> int:
+    pass
 
 
 def main():
