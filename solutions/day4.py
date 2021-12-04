@@ -45,14 +45,14 @@ class BingoCard:
                 self.marked_nums.append(int(number))
                 self.remaining_sum -= int(number)
         if len(self.marked_nums) >= 5:
-            self._set_bingo(number)
+            self._set_bingo()
 
-    def _set_bingo(self, called_num: str):
+    def _set_bingo(self):
         cols = [list(tup) for tup in list(zip(*self.marks)) if None not in tup]
         if len([row for row in self.marks if None not in row]) > 0 or len(cols) > 0:
             self.has_bingo = True
 
-    def check_bingo(self, called_num):
+    def check_bingo(self):
         if self.has_bingo:
             raise BingoCalledException(
                 f"""BINGO!!!! 
@@ -62,9 +62,9 @@ class BingoCard:
                         {self.marks[2]}
                         {self.marks[3]}
                         {self.marks[4]}
-                        Num called: {called_num}
+                        Num called: {self.marked_nums[-1]}
                         Remaining: {self.remaining_sum}
-                        Score: {int(called_num)*self.remaining_sum}"""
+                        Score: {self.marked_nums[-1]*self.remaining_sum}"""
             )
 
 
@@ -75,7 +75,7 @@ def part1():
         try:
             for card in bingo_cards:
                 card.mark_number(num)
-                card.check_bingo(num)
+                card.check_bingo()
 
         except BingoCalledException as bingo:
             print(bingo)
