@@ -27,8 +27,9 @@ class BingoCard:
         self.marks = [
             [None for i in range(len(raw_card))] for i in range(len(raw_card))
         ]
-        self.marked_nums = []
-        self.remaining_sum = self._calculate_sum()
+        self.marked_nums: list[int] = []
+        self.remaining_sum: int = self._calculate_sum()
+        self.has_bingo: bool = False
 
     def _calculate_sum(self):
         card_sum = 0
@@ -44,39 +45,60 @@ class BingoCard:
                 self.marked_nums.append(int(number))
                 self.remaining_sum -= int(number)
         if len(self.marked_nums) >= 5:
-            self._check_bingo(number)
+            self._set_bingo(number)
 
-    def _check_bingo(self, called_num: str):
+    def _set_bingo(self, called_num: str):
         cols = [list(tup) for tup in list(zip(*self.marks)) if None not in tup]
         if len([row for row in self.marks if None not in row]) > 0 or len(cols) > 0:
+            self.has_bingo = True
+
+    def check_bingo(self, called_num):
+        if self.has_bingo:
             raise BingoCalledException(
                 f"""BINGO!!!! 
-                    Marked:
-                    {self.marks[0]}
-                    {self.marks[1]}
-                    {self.marks[2]}
-                    {self.marks[3]}
-                    {self.marks[4]}
-                    Num called: {called_num}
-                    Remaining: {self.remaining_sum}
-                    Score: {int(called_num)*self.remaining_sum}"""
+                        Marked:
+                        {self.marks[0]}
+                        {self.marks[1]}
+                        {self.marks[2]}
+                        {self.marks[3]}
+                        {self.marks[4]}
+                        Num called: {called_num}
+                        Remaining: {self.remaining_sum}
+                        Score: {int(called_num)*self.remaining_sum}"""
             )
 
 
 def part1():
     raw_cards = parse_card_data(data)
-    bingo_cards = [BingoCard(card) for card in raw_cards]
+    bingo_cards: list[BingoCard] = [BingoCard(card) for card in raw_cards]
     for num in called_nums:
         try:
             for card in bingo_cards:
                 card.mark_number(num)
+                card.check_bingo(num)
+
         except BingoCalledException as bingo:
             print(bingo)
             break
 
 
+def part2():
+    raw_cards = parse_card_data(data)
+    bingo_cards: list[BingoCard] = [BingoCard(card) for card in raw_cards]
+    bingos: list[BingoCard] = []
+    for num in called_nums:
+        for card in bingo_cards:
+            card.mark_number(num)
+            if card.has_bingo:
+                bingos.append(card)
+                bingo_cards = [card for card in bingo_cards if not card.has_bingo]
+
+    print(bingos[-1].marked_nums[-1] * bingos[-1].remaining_sum)
+
+
 def main():
     part1()
+    part2()
 
 
 if __name__ == "__main__":
