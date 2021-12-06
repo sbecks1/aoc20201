@@ -24,7 +24,7 @@ class MapGrid:
         self.layers: list[Line] = []
 
     def create_grid(self, x_max, y_max):
-        return [[0 for i in range(0, x_max + 1)] for i in range(0, y_max + 1)]
+        return [[0 for i in range(0, x_max + 2)] for i in range(0, y_max + 2)]
 
     def add_line(self, line: Line):
         for pt in line.geometry:
@@ -41,14 +41,54 @@ class MapGrid:
                 self.grid[line.geometry[0].y][i] += 1
 
 
+def parse_line_text(text: str) -> Line:
+    pt1 = text.split(" -> ")[0]
+    pt1_x = int(pt1.split(",")[0])
+    pt1_y = int(pt1.split(",")[1])
+    pt2 = text.split(" -> ")[1]
+    pt2_x = int(pt2.split(",")[0])
+    pt2_y = int(pt2.split(",")[1])
+
+    return Line([Point(pt1_x, pt1_y), Point(pt2_x, pt2_y)])
+
+
+def find_bottom_right(features: list[Line]) -> Point:
+    x_max = 0
+    y_max = 0
+
+    for ft in features:
+        big_x = max([pt.x for pt in ft.geometry])
+        big_y = max([pt.x for pt in ft.geometry])
+        if big_x > x_max:
+            x_max = big_x
+        if big_y > y_max:
+            y_max = big_y
+
+    return Point(x_max, y_max)
+
+
 def part1():
     pass
 
 
 def main():
+    lines: list[Line] = []
     with open("inputs/day5.txt") as f:
         for line in f.readlines():
-            print(line)
+            line_ft = parse_line_text(line)
+            if line_ft.is_horizontal() or line_ft.is_vertical():
+                lines.append(line_ft)
+
+    br_pt = find_bottom_right(lines)
+    vent_map = MapGrid(br_pt.x, br_pt.y)
+    for line in lines:
+        vent_map.add_line(line)
+
+    with open("inputs/map.txt", "w") as fo:
+        for row in vent_map.grid:
+            for coord in row:
+                fo.write(str(coord))
+            fo.write("\n")
 
 
 if __name__ == "__main__":
