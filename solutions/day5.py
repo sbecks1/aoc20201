@@ -33,10 +33,29 @@ class MapGrid:
             for i in range(min(y_coords), max(y_coords) + 1):
                 self.grid[i][line.geometry[0].x] += 1
 
-        if line.is_horizontal():
+        elif line.is_horizontal():
             x_coords = [pt.x for pt in line.geometry]
             for i in range(min(x_coords), max(x_coords) + 1):
                 self.grid[line.geometry[0].y][i] += 1
+
+        else:
+            pt1 = line.geometry[0]
+            pt2 = line.geometry[1]
+
+            xs = []
+            ys = []
+            if pt1.x < pt2.x:
+                xs = list(range(pt1.x, pt2.x + 1))
+            elif pt1.x > pt2.x:
+                xs = list(range(pt1.x, pt2.x - 1, -1))
+
+            if pt1.y < pt2.y:
+                ys = list(range(pt1.y, pt2.y + 1))
+            elif pt1.y > pt2.y:
+                ys = list(range(pt1.y, pt2.y - 1, -1))
+
+            for pt in list(zip(xs, ys)):
+                self.grid[pt[1]][pt[0]] += 1
 
     def count_intersections(self) -> int:
         intersections = 0
@@ -99,12 +118,29 @@ def part1():
     for line in lines:
         vent_map.add_line(line)
 
-    print(f"{vent_map.count_intersections()} intersections found.")
+    print(f"{vent_map.count_intersections()} intersections found in map 1.")
     vent_map.draw("visualizations/day5_pt1_map.txt")
+
+
+def part2():
+    lines: list[Line] = []
+    with open("inputs/day5.txt") as f:
+        for line in f.readlines():
+            line_ft = parse_line_text(line)
+            lines.append(line_ft)
+
+    br_pt = find_bottom_right(lines)
+    vent_map = MapGrid(br_pt.x, br_pt.y)
+    for line in lines:
+        vent_map.add_line(line)
+
+    print(f"{vent_map.count_intersections()} intersections found in map 2.")
+    vent_map.draw("visualizations/day5_pt2_map.txt")
 
 
 def main():
     part1()
+    part2()
 
 
 if __name__ == "__main__":
