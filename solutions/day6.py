@@ -30,9 +30,11 @@ def part1():
 
 def part2():
     total_fish = 0
-    for fish in fishes:
+    for fish in [3, 4, 3, 1, 2]:
         total_fish += lifetime_reproduction(fish, 256)
     print(total_fish)
+
+    # runs forever...
 
 
 def main():
