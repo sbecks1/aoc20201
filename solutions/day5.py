@@ -50,6 +50,12 @@ class MapGrid:
         with open(output_filepath, "w") as fo:
             for row in self.grid:
                 for coord in row:
+                    if coord == 0:
+                        coord = " "
+                    elif coord == 1:
+                        coord = "•"
+                    elif coord >= 2:
+                        coord = "+"
                     fo.write(str(coord))
                 fo.write("\n")
 
