@@ -53,7 +53,7 @@ class MapGrid:
                     if coord == 0:
                         coord = " "
                     elif coord == 1:
-                        coord = "•"
+                        coord = "."
                     elif coord >= 2:
                         coord = "+"
                     fo.write(str(coord))
