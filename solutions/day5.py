@@ -27,18 +27,31 @@ class MapGrid:
         return [[0 for i in range(0, x_max + 2)] for i in range(0, y_max + 2)]
 
     def add_line(self, line: Line):
-        for pt in line.geometry:
-            self.grid[pt.y][pt.x] += 1
 
         if line.is_vertical():
             y_coords = [pt.y for pt in line.geometry]
-            for i in range(min(y_coords) + 1, max(y_coords) + 1):
+            for i in range(min(y_coords), max(y_coords) + 1):
                 self.grid[i][line.geometry[0].x] += 1
 
         if line.is_horizontal():
             x_coords = [pt.x for pt in line.geometry]
-            for i in range(min(x_coords) + 1, max(x_coords) + 1):
+            for i in range(min(x_coords), max(x_coords) + 1):
                 self.grid[line.geometry[0].y][i] += 1
+
+    def count_intersections(self) -> int:
+        intersections = 0
+        for row in self.grid:
+            for i in row:
+                if i >= 2:
+                    intersections += 1
+        return intersections
+
+    def draw(self, output_filepath: str) -> None:
+        with open(output_filepath, "w") as fo:
+            for row in self.grid:
+                for coord in row:
+                    fo.write(str(coord))
+                fo.write("\n")
 
 
 def parse_line_text(text: str) -> Line:
@@ -68,10 +81,6 @@ def find_bottom_right(features: list[Line]) -> Point:
 
 
 def part1():
-    pass
-
-
-def main():
     lines: list[Line] = []
     with open("inputs/day5.txt") as f:
         for line in f.readlines():
@@ -84,11 +93,12 @@ def main():
     for line in lines:
         vent_map.add_line(line)
 
-    with open("inputs/map.txt", "w") as fo:
-        for row in vent_map.grid:
-            for coord in row:
-                fo.write(str(coord))
-            fo.write("\n")
+    print(f"{vent_map.count_intersections()} intersections found.")
+    vent_map.draw("visualizations/day5_pt1_map.txt")
+
+
+def main():
+    part1()
 
 
 if __name__ == "__main__":
