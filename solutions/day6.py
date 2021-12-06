@@ -4,33 +4,40 @@ from typing_extensions import Self
 with open("inputs/day6.txt") as f:
     ages = f.read().rstrip().split(",")
 
-fish: list[int] = [int(age) for age in ages]
+fishes: list[int] = [int(age) for age in ages]
 
 
-def model_latern_fish(fish: list[int], num_steps: int) -> list[int]:
-    new_fish = []
-    for i in range(num_steps):
-        for i, lf in enumerate(fish):
+def lifetime_reproduction(fish_age: int, num_steps: int) -> int:
+    fish_count = 1
+    age = fish_age
+    for i in range(num_steps, 0, -1):
+        if age == 0:
+            age = 6
+            fish_count += lifetime_reproduction(8, i - 1)
+            continue
+        age -= 1
 
-            if lf == 0:
-                fish[i] = 6
-                new_fish.append(0)
-                continue
-
-            fish[i] -= 1
-        fish.extend(new_fish.copy())
-        new_fish = []
-
-    return fish
+    return fish_count
 
 
 def part1():
-    num_fish = len(model_latern_fish(fish, 40))
-    print(num_fish)
+
+    total_fish = 0
+    for fish in fishes:
+        total_fish += lifetime_reproduction(fish, 80)
+    print(total_fish)
+
+
+def part2():
+    total_fish = 0
+    for fish in fishes:
+        total_fish += lifetime_reproduction(fish, 256)
+    print(total_fish)
 
 
 def main():
     part1()
+    part2()
 
 
 if __name__ == "__main__":
