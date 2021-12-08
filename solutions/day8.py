@@ -18,26 +18,22 @@ def signal_decoder(pattern) -> dict[str, str]:
     for digit in pattern.split(" "):
 
         if len(digit) == 6:  # 0,6,9
+
             if len(set(segments["1"]) - set(digit)) == 1:
                 decoded["".join(sorted(digit))] = "6"
-                segments["6"] = digit
             elif len(set(segments["4"]) - set(digit)) == 0:
                 decoded["".join(sorted(digit))] = "9"
-                segments["9"] = digit
             else:
                 decoded["".join(sorted(digit))] = "0"
-                segments["0"] = digit
 
         elif len(digit) == 5:  # 2,3,5
+
             if len(set(segments["4"]) - set(digit)) == 2:
                 decoded["".join(sorted(digit))] = "2"
-                segments["2"] = digit
             elif len(set(segments["1"]) - set(digit)) == 0:
                 decoded["".join(sorted(digit))] = "3"
-                segments["3"] = digit
             else:
                 decoded["".join(sorted(digit))] = "5"
-                segments["5"] = digit
 
     return decoded
 
