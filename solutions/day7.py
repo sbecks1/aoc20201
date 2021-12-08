@@ -17,7 +17,7 @@ def part1(data) -> int:
 
 def part2(data) -> int:
     min_fuel = math.inf
-    for org in range(min(data), max(data) + 1):
+    for org in range(min(data), max(data) + 1):  # forget unoccupied positions
         fuel_use = 0
 
         for dest in data:
