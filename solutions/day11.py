@@ -45,6 +45,7 @@ class DumboGrid:
         self.new_flashers: list[Dumbo] = []
         self.flashed_on_step: list[Dumbo] = []
         self.step_complete = False
+        self.simulaneous_flashes = []
 
     def do_step(self):
         self.step_num += 1
@@ -57,6 +58,9 @@ class DumboGrid:
 
         for octo in self.flashed_on_step:
             octo.reset()
+
+        if len(self.flashed_on_step) == (len(self.state) * len(self.state[0])):
+            self.simulaneous_flashes.append(self.step_num)
 
         self.flashed_on_step = []
         self.step_complete = False
@@ -100,7 +104,24 @@ dumbos = parse_input(data)
 dumbo_grid = DumboGrid(dumbos)
 
 
-while dumbo_grid.step_num < 100:
-    dumbo_grid.do_step()
+def part1():
+    while dumbo_grid.step_num < 100:
+        dumbo_grid.do_step()
 
-print(dumbo_grid.total_flashes)
+    print(dumbo_grid.total_flashes)
+
+
+def part2():
+    while len(dumbo_grid.simulaneous_flashes) == 0:
+        dumbo_grid.do_step()
+
+    print(dumbo_grid.simulaneous_flashes[0])
+
+
+def main():
+    part1()
+    part2()
+
+
+if __name__ == "__main__":
+    main()
